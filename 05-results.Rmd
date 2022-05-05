@@ -27,11 +27,10 @@ rate = rate %>% filter(year > 1995)
 rate_count = rate %>% group_by(year) %>% summarise(count = n(), mean_score = mean(rating))
 
 
-scaleFactor <- max(rate_count$count) / max(rate_count$mean_score)
+#scaleFactor <- max(rate_count$count) / max(rate_count$mean_score)
 
 g = ggplot(rate_count) +
   geom_line(aes(x = year, y = count, group = 1)) +
-  geom_line(aes(x = year, y = mean_score * scaleFactor, group = 1)) +
   ggtitle("Rating Trend & Count Trend") +
   labs (x = "Year", y = "Number") +
   theme_grey(16) +
@@ -102,11 +101,11 @@ genres_year = genres %>% group_by(year, genres) %>% summarise(count = n(), mean_
 genres_year = genres_year[order(genres_year$genres, genres_year$year),]
 
 ggplot(genres_year,) +
-    geom_line( aes(year, count, group = 1)) +
-    facet_grid(genres~.) +
+    geom_line( aes(year, count, color = genres, group = genres)) + 
   theme_grey(10) +
   theme(legend.title = element_blank()) +
   scale_x_discrete(breaks = seq(1995, 2020, by = 3))
+
 
 # movie_veen = movie[movie$cnt > 0,c("Drama","Comedy","Action","Thriller", "Adventure")]
 # d = tibble(value = c(seq(1, nrow(movie_veen))),
@@ -128,13 +127,34 @@ for(c in selected_genres){
 
 movie$cnt = rowSums(movie[,c("Drama","Comedy","Action","Thriller", "Adventure")])
 
-movie_overlap = movie %>% group_by(cnt) %>% summarise(count = n())
-movie_overlap$cnt = as.character(movie_overlap$cnt )
-ggplot(movie_overlap, aes(x="", y=count, fill=cnt)) +
-  geom_bar(stat="identity", width=1, color="white") +
-  coord_polar("y", start=0) +
-  theme_void() # remove background, grid, numeric labels
 
+movie$cat = case_when(movie$cnt == 0 ~ "None of popular genre", 
+          movie$cnt == 1 ~ "contain 1 famous genre", 
+          movie$cnt == 2 ~ "contain 2 famous genre", 
+          movie$cnt >= 3 ~ "contain > 3 famous genre", 
+          TRUE ~ "NA")
+
+movie_overlap = movie %>% group_by(cat) %>% summarise(count = n())
+
+
+# Data transformation
+movie_overlap <- movie %>% 
+  group_by(cat) %>% # Variable to be transformed
+  count() %>% 
+  ungroup() %>% 
+  mutate(perc = `n` / sum(`n`)) %>% 
+  arrange(perc) %>%
+  mutate(labels = scales::percent(perc))
+
+ggplot(movie_overlap, aes(x = "", y = perc, fill = cat)) +
+  geom_col(color = "black") +
+  geom_label(aes(label = labels), color = c("white", "white", "black", "white"),
+            position = position_stack(vjust = 0.5),
+            show.legend = FALSE) +
+  guides(fill = guide_legend(title = "Answer")) +
+  scale_fill_viridis_d() +
+  coord_polar(theta = "y") + 
+  theme_void()
 ```
 
 
@@ -166,6 +186,13 @@ ggplot(data=movie_cnt, aes(x=count, y=reorder(title, count))) +
     geom_bar(stat="identity") + 
   scale_y_discrete("Movie name", expand=c(0,0)) + 
   scale_x_continuous("Total Rate Count")
+```
+
+## Popular Movies
+
+
+```{r, echo = FALSE,fig.width=6, fig.height=8}
+movie_pop = rate %>% group_by(title, genres) %>% summarise(count = n()) %>% arrange(desc(count))
 ```
 
 ## Movie Trend for genre
