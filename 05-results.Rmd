@@ -195,9 +195,9 @@ ggplot(data=movie_cnt, aes(x=count, y=reorder(title, count))) +
 movie_pop = rate %>% group_by(title, genres) %>% summarise(count = n()) %>% arrange(desc(count))
 ```
 
-## Movie Trend for genre
+## Trend of The most popular Movie 
 
-```{r, echo = FALSE,fig.width=6, fig.height=8}
+```{r, echo = FALSE,fig.width=8, fig.height=4}
 
 genres = rate %>% select(c("genres", "year", "rating", "title")) %>% 
    mutate(genres =  strsplit(genres,split='|', fixed=TRUE)) %>%
@@ -227,8 +227,7 @@ movie_year = movie_trend %>% group_by(year, title) %>% summarise(count = n(), me
 movie_year = movie_year[order(movie_year$title, movie_year$year),]
 
 ggplot(movie_year,) +
-    geom_line( aes(year, count, group = 1)) +
-    facet_grid(title~.) +
+    geom_line( aes(year, count, color = title, group = title)) + 
   theme_grey(10) +
   theme(legend.title = element_blank()) +
   scale_x_discrete(breaks = seq(1995, 2020, by = 3))
