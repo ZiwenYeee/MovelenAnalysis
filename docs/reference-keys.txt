@@ -5,3 +5,6 @@ missing-values
 results
 interactive-component
 conclusion
+overall-trend
+genre-exploration
+popular-genre-year-analysis
