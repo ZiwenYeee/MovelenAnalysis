@@ -1,7 +1,7 @@
 --- 
 title: "Hierachical Analysis for MovieLen: From overall to the movie"
 author: "Ziwen Ye, Fan Wu"
-date: "`r Sys.Date()`"
+date: "2022-05-06"
 site: bookdown::bookdown_site
 ---
 

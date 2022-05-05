@@ -1,5 +1,6 @@
 # Interactive component
 
+## Top 5 movies rating in top 5 popular genre
 
 
 ```{r , echo=FALSE,fig.width=8, fig.height=6}
@@ -10,6 +11,7 @@ library(lubridate)
 library(ggplot2)
 library(tidyr)
 library(reshape2)
+library(plotly)
 
 rate = fread("../ml-25m/ratings.csv")
 movie = fread("../ml-25m/movies.csv")
@@ -49,94 +51,58 @@ get_data <- function(rate, name){
   
 drama_data = get_data(rate, "Drama")
 comedy_data = get_data(rate, "Comedy")
+action_data = get_data(rate, "Action")
+th_data = get_data(rate, "Thriller")
+adv_data = get_data(rate, "Adventure")
 
-
-g = ggplot(drama_data,) +
-    geom_line( aes(year, mean_score, color = title, group = title)) + 
-  theme_grey(10) +
-  theme(legend.title = element_blank()) +
-  scale_x_discrete(breaks = seq(1995, 2020, by = 3)) + 
-  ylab("Average Rating[Out of 5]")
-
-ggplotly(g)
-
-
-
-
-```
-
-
-```{r}
-library(plotly)
-library(quantmod)
-
-d <- quantmod::getSymbols("AAPL")
-
-df <- data.frame(Date=index(AAPL),coredata(AAPL))
-
-high_annotations <- list(
-  x=df$Date[df$AAPL.High == max(df$AAPL.High)], 
-  y=max(df$AAPL.High),
-  xref='x', yref='y',
-  text=paste0('High: $',max(df$AAPL.High)),
-  ax=0, ay=-40
-)
-
-low_annotations <- list(
-  x=df$Date[df$AAPL.Low == min(df$AAPL.Low)], 
-  y=min(df$AAPL.Low),
-  xref='x', yref='y',
-  text=paste0('Low: $',min(df$AAPL.Low)),
-  ax=0, ay=40
-)
-
-# updatemenus component
-updatemenus <- list(
-  list(
-    active = -1,
-    type= 'buttons',
-    buttons = list(
-      list(
-        label = "High",
-        method = "update",
-        args = list(list(visible = c(FALSE, TRUE)),
-                    list(title = "Apple High",
-                         annotations = list(c(), high_annotations)))),
-      list(
-        label = "Low",
-        method = "update",
-        args = list(list(visible = c(TRUE, FALSE)),
-                    list(title = "Apple Low",
-                         annotations = list(low_annotations, c() )))),
-      list(
-        label = "Both",
-        method = "update",
-        args = list(list(visible = c(TRUE, TRUE)),
-                    list(title = "Apple",
-                         annotations = list(low_annotations, high_annotations)))),
-      list(
-        label = "Reset",
-        method = "update",
-        args = list(list(visible = c(TRUE, TRUE)),
-                    list(title = "Apple",
-                         annotations = list(c(), c())))))
-  )
-)
-
-fig <- df %>% plot_ly(type = 'scatter', mode = 'lines') 
-fig <- fig %>% add_lines(x=~Date, y=~AAPL.High, name="High",
-            line=list(color="#33CFA5")) 
-fig <- fig %>% add_lines(x=~Date, y=~AAPL.Low, name="Low",
-            line=list(color="#F06A6A")) 
-fig <- fig %>% layout(title = "Apple", showlegend=FALSE,
-         xaxis=list(title="Date"),
-         yaxis=list(title="Price ($)"),
-         updatemenus=updatemenus)
+p <- plot_ly(mode = 'lines')
+p <- add_lines(p,data = drama_data %>% ungroup(), 
+               x = ~year,
+               y = ~mean_score,
+               color = ~title, visible = T)
+p <- add_lines(p,data = comedy_data %>% ungroup(), 
+               x = ~year,
+               y = ~mean_score,
+               color = ~title, visible = F)
+p <- add_lines(p,data = action_data %>% ungroup(), 
+               x = ~year,
+               y = ~mean_score,
+               color = ~title, visible = F)
+p <- add_lines(p,data = th_data %>% ungroup(), 
+               x = ~year,
+               y = ~mean_score,
+               color = ~title, visible = F)
+p <- add_lines(p,data = adv_data %>% ungroup(), 
+               x = ~year,
+               y = ~mean_score,
+               color = ~title, visible = F)
 
 
 
-fig
-  
+p <- p %>% layout(updatemenus = list(
+    list(buttons = list(
+      list(method = "restyle",
+           args = list(list(visible = c(T, F, F, F, F))),
+           label = "Drama"),
+      list(method = "restyle",
+           args = list(list(visible = c(F, T, F, F, F))),
+           label = "Comedy"),
+      list(method = "restyle",
+           args = list(list(visible = c(F, F, T, F, F))),
+           label = "Action"),
+      list(method = "restyle",
+           args = list(list(visible = c(F, F, F, T, F))),
+           label = "Thriller"),
+      list(method = "restyle",
+           args = list(list(visible = c(F, F, F, F, T))),
+           label = "Adventure")
+    ))
+  ))
+p
+
+
 
 
 ```
+
+

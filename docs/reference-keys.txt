@@ -19,3 +19,4 @@ popular-genre-trend-analysis
 exploration
 limitations
 future-directions
+top-5-movies-rating-in-top-5-popular-genre
