@@ -1,1 +1,26 @@
 # Results
+
+
+```{r hide}
+
+library(data.table)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+
+rate = read.csv("../ml-25m/ratings.csv")
+rate$date = as.POSIXct(rate$timestamp, origin="1970-01-01", tz="GMT")
+rate$date = as.Date(rate$date, "GMT")
+
+rate$year = format(rate$date, format = "%Y")
+rate = rate %>% filter(year > 1995)
+rate_count = rate %>% group_by(year) %>% summarise(count = n())
+
+g = ggplot(rate_count, aes(x = year, y = count, group = 1)) + geom_line() +
+  ggtitle("Rating Trend") +
+  labs (x = "Year", y = "Number") +
+  theme_grey(16) +
+  theme(legend.title = element_blank())
+g
+
+```
