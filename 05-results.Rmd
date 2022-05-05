@@ -50,14 +50,17 @@ g
 
 
 ```{r , echo=FALSE}
+
 genres = rate %>% select(c("genres", "year", "rating")) %>% 
-   mutate(genres =  strsplit(genres,split='|', fixed=TRUE)) %>%
+   mutate(genres =  strsplit(genres, split='|', fixed=TRUE)) %>%
    unnest(c(genres))
-genres_count = genres %>% group_by(genres) %>% summarise(count = n(), mean_score = mean(rating)) %>%
+genres_cnt = genres %>% group_by(genres) %>% summarise(count = n(), mean_score = mean(rating)) %>%
   arrange(-count)
 
-ggplot(data=genres_count, aes(x=count, y=reorder(genres, count))) +
-    geom_bar(stat="identity")
+ggplot(data=genres_cnt, aes(x=count, y=reorder(genres, count))) +
+    geom_bar(stat="identity") + 
+  scale_y_discrete("Genre name", expand=c(0,0)) + 
+  scale_x_continuous("Total Rate Count")
 
 rm(genres);invisible(gc())
 
@@ -66,31 +69,144 @@ rm(genres);invisible(gc())
 
 ## Popular Genre Year Analysis
 
-```{r, echo = FALSE}
+```{r, echo = FALSE,fig.width=6, fig.height=4}
 
-top_genres = genres_count[1:5, ]
-selected_genres = c(top_genres$genres)
+
+cross_func <- function(category, c_list){
+  cnt = 0
+  for(c in c_list){
+    if(grepl(category, c)){
+      cnt = cnt + 1
+    }
+  }
+  return(cnt)
+}
+
+
+
 
 genres = rate %>% select(c("genres", "year", "rating")) %>% 
    mutate(genres =  strsplit(genres,split='|', fixed=TRUE)) %>%
    unnest(c(genres))
 
+genres_cnt = genres %>% group_by(genres) %>% summarise(count = n(), mean_score = mean(rating)) %>%
+  arrange(-count)
+
+top_genres = genres_cnt[1:5, ]
+selected_genres = c(top_genres$genres)
+
 genres = genres %>% filter(genres %in% selected_genres)
-genres = genres %>% filter(year > 1995)
 
-genres_count = genres %>% group_by(year, genres) %>% summarise(count = n(), mean_score = mean(rating))
+genres_year = genres %>% group_by(year, genres) %>% summarise(count = n(), mean_score = mean(rating))
 
-genres_count = genres_count[order(genres_count$genres, genres_count$year),]
+genres_year = genres_year[order(genres_year$genres, genres_year$year),]
 
-ggplot(genres_count,) +
+ggplot(genres_year,) +
     geom_line( aes(year, count, group = 1)) +
     facet_grid(genres~.) +
   theme_grey(10) +
   theme(legend.title = element_blank()) +
   scale_x_discrete(breaks = seq(1995, 2020, by = 3))
 
-rm(genres);invisible(gc())
-
-
+# movie_veen = movie[movie$cnt > 0,c("Drama","Comedy","Action","Thriller", "Adventure")]
+# d = tibble(value = c(seq(1, nrow(movie_veen))),
+#            `Drama` = movie_veen$Drama,
+#            `Comedy` = movie_veen$Comedy,
+#            `Action` = movie_veen$Action,
+#            )
+# ggvenn(d)  # draw three-set venn
 
 ```
+
+## Overlap for popular genres
+
+```{r, echo = FALSE}
+
+for(c in selected_genres){
+  movie[,paste(c)] = mapply(grepl, movie$genres, c)
+}
+
+movie$cnt = rowSums(movie[,c("Drama","Comedy","Action","Thriller", "Adventure")])
+
+movie_overlap = movie %>% group_by(cnt) %>% summarise(count = n())
+movie_overlap$cnt = as.character(movie_overlap$cnt )
+ggplot(movie_overlap, aes(x="", y=count, fill=cnt)) +
+  geom_bar(stat="identity", width=1, color="white") +
+  coord_polar("y", start=0) +
+  theme_void() # remove background, grid, numeric labels
+
+```
+
+
+## Popular Movie in Most popular genres
+
+```{r, echo = FALSE}
+
+genres = rate %>% select(c("genres", "year", "rating", "title")) %>% 
+   mutate(genres =  strsplit(genres,split='|', fixed=TRUE)) %>%
+   unnest(c(genres))
+
+genres_cnt = genres %>% group_by(genres) %>% 
+  summarise(count = n(), mean_score = mean(rating)) %>%
+  arrange(-count)
+
+top_genre_data = genres_cnt[1, ]
+top_genres =  c(top_genre_data$genres)
+
+genres = genres %>% filter(genres %in% top_genres)
+
+movie_cnt = genres  %>% group_by(title) %>% summarise(count = n(), mean_score = mean(rating))
+
+movie_cnt = movie_cnt[order(movie_cnt$count, decreasing = TRUE),]
+
+movie_cnt = movie_cnt[1:10, ]
+
+
+ggplot(data=movie_cnt, aes(x=count, y=reorder(title, count))) +
+    geom_bar(stat="identity") + 
+  scale_y_discrete("Movie name", expand=c(0,0)) + 
+  scale_x_continuous("Total Rate Count")
+```
+
+## Movie Trend for genre
+
+```{r, echo = FALSE,fig.width=6, fig.height=8}
+
+genres = rate %>% select(c("genres", "year", "rating", "title")) %>% 
+   mutate(genres =  strsplit(genres,split='|', fixed=TRUE)) %>%
+   unnest(c(genres))
+
+genres_cnt = genres %>% group_by(genres) %>% 
+  summarise(count = n(), mean_score = mean(rating)) %>%
+  arrange(-count)
+
+top_genres = genres_cnt[1, ]
+top_genre =  c(top_genres$genres)
+
+genres = genres %>% filter(genres %in% top_genre)
+
+
+movie_cnt = genres  %>% group_by(title) %>% summarise(count = n(), mean_score = mean(rating))
+
+movie_cnt = movie_cnt[order(movie_cnt$count, decreasing = TRUE),]
+
+movie_cnt = movie_cnt[1:5, ]
+
+movie_trend = genres %>% filter(title %in% c(movie_cnt$title))
+
+
+movie_year = movie_trend %>% group_by(year, title) %>% summarise(count = n(), mean_score = mean(rating))
+
+movie_year = movie_year[order(movie_year$title, movie_year$year),]
+
+ggplot(movie_year,) +
+    geom_line( aes(year, count, group = 1)) +
+    facet_grid(title~.) +
+  theme_grey(10) +
+  theme(legend.title = element_blank()) +
+  scale_x_discrete(breaks = seq(1995, 2020, by = 3))
+
+```
+
+
+
