@@ -1,7 +1,10 @@
 # Results
 
+We begin with an overall analysis and then move to genre analysis. Finally we reach to analysing popular movie in the most popular genre and to see its connection with other movies.
+
+
 ## Overall Trend
-//To-do: Modified Label\
+
 
 ```{r , echo=FALSE,fig.width=8, fig.height=6}
 
@@ -62,7 +65,7 @@ g
 //To-do: Modified Label\
 
 
-```{r , echo=FALSE}
+```{r , echo=FALSE, fig.width=8, fig.height=4}
 
 genres = rate %>% select(c("genres", "year", "rating")) %>% 
    mutate(genres =  strsplit(genres, split='|', fixed=TRUE)) %>%
@@ -82,7 +85,7 @@ rm(genres);invisible(gc())
 
 ## Popular Genre Year Analysis
 
-```{r, echo = FALSE,fig.width=6, fig.height=4}
+```{r, echo = FALSE,fig.width=8, fig.height=4}
 
 
 cross_func <- function(category, c_list){
@@ -243,5 +246,6 @@ movie_name = c("Forrest Gump (1994)", "Shawshank Redemption, The (1994)",
   "Pulp Fiction (1994)" , "Schindler's List (1993)","Braveheart (1995)")
 
 rate_f = rate %>% filter(title %in% movie_name)
+
 ```
 
