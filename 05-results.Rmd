@@ -3,7 +3,7 @@
 ## Overall Trend
 //To-do: Modified Label\
 
-```{r , echo=FALSE,fig.width=6, fig.height=4}
+```{r , echo=FALSE,fig.width=8, fig.height=6}
 
 library(data.table)
 library(dplyr)
@@ -26,19 +26,33 @@ rate$year = format(rate$date, format = "%Y")
 rate = rate %>% filter(year > 1995)
 rate_count = rate %>% group_by(year) %>% summarise(count = n(), mean_score = mean(rating))
 
+rate_count$count = rate_count$count/1000000
+rate_cnt_gather = gather(rate_count, key = "name", value = "value", -year)
 
 #scaleFactor <- max(rate_count$count) / max(rate_count$mean_score)
-
+theme_update(plot.title = element_text(hjust = 0.5))
 g = ggplot(rate_count) +
   geom_line(aes(x = year, y = count, group = 1)) +
-  ggtitle("Rating Trend & Count Trend") +
-  labs (x = "Year", y = "Number") +
-  theme_grey(16) +
-  theme(legend.title = element_blank()) +
-  scale_x_discrete(breaks = seq(1995, 2020, by = 3))
+  ggtitle("Rating Trend & Count Trend",) +
+  labs (x = "Year", y = "Rate Count(1 million)/Per year") +
+  theme_grey(12) +
+  theme(legend.title = element_blank(), plot.title=element_text(hjust=0.5)) +
+  scale_x_discrete(breaks = seq(1995, 2020, by = 2))
+
+
+var_name <- c(
+  'count'="Rate Number[M/year]",
+  "mean_score"="Average Rating[/5]"
+)
+
+g = ggplot(rate_cnt_gather) +
+  geom_line(aes(x = year, y = value, group = 1)) +
+  ggtitle("Rating Trend & Count Trend",) +
+  theme_grey(12) +
+  theme(legend.title = element_blank(), plot.title=element_text(hjust=0.5)) +
+  scale_x_discrete(breaks = seq(1995, 2020, by = 2)) +
+    facet_grid(name~., labeller = as_labeller(var_name))
 g
-
-
 
 
 ```
@@ -53,13 +67,13 @@ g
 genres = rate %>% select(c("genres", "year", "rating")) %>% 
    mutate(genres =  strsplit(genres, split='|', fixed=TRUE)) %>%
    unnest(c(genres))
-genres_cnt = genres %>% group_by(genres) %>% summarise(count = n(), mean_score = mean(rating)) %>%
+genres_cnt = genres %>% group_by(genres) %>% summarise(count = n()/1000000, mean_score = mean(rating)) %>%
   arrange(-count)
 
 ggplot(data=genres_cnt, aes(x=count, y=reorder(genres, count))) +
     geom_bar(stat="identity") + 
   scale_y_discrete("Genre name", expand=c(0,0)) + 
-  scale_x_continuous("Total Rate Count")
+  scale_x_continuous("Total Rate Count[Million]")
 
 rm(genres);invisible(gc())
 
@@ -106,14 +120,6 @@ ggplot(genres_year,) +
   theme(legend.title = element_blank()) +
   scale_x_discrete(breaks = seq(1995, 2020, by = 3))
 
-
-# movie_veen = movie[movie$cnt > 0,c("Drama","Comedy","Action","Thriller", "Adventure")]
-# d = tibble(value = c(seq(1, nrow(movie_veen))),
-#            `Drama` = movie_veen$Drama,
-#            `Comedy` = movie_veen$Comedy,
-#            `Action` = movie_veen$Action,
-#            )
-# ggvenn(d)  # draw three-set venn
 
 ```
 
@@ -188,12 +194,6 @@ ggplot(data=movie_cnt, aes(x=count, y=reorder(title, count))) +
   scale_x_continuous("Total Rate Count")
 ```
 
-## Popular Movies
-
-
-```{r, echo = FALSE,fig.width=6, fig.height=8}
-movie_pop = rate %>% group_by(title, genres) %>% summarise(count = n()) %>% arrange(desc(count))
-```
 
 ## Trend of The most popular Movie 
 
@@ -227,12 +227,21 @@ movie_year = movie_trend %>% group_by(year, title) %>% summarise(count = n(), me
 movie_year = movie_year[order(movie_year$title, movie_year$year),]
 
 ggplot(movie_year,) +
-    geom_line( aes(year, count, color = title, group = title)) + 
+    geom_line( aes(year, mean_score, color = title, group = title)) + 
   theme_grey(10) +
   theme(legend.title = element_blank()) +
   scale_x_discrete(breaks = seq(1995, 2020, by = 3))
 
 ```
 
+## Aluvial for famous movies
 
+
+```{r, echo = FALSE,fig.width=8, fig.height=4}
+
+movie_name = c("Forrest Gump (1994)", "Shawshank Redemption, The (1994)", 
+  "Pulp Fiction (1994)" , "Schindler's List (1993)","Braveheart (1995)")
+
+rate_f = rate %>% filter(title %in% movie_name)
+```
 

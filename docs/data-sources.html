@@ -6,11 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <title>Chapter 2 Data sources | YOUR TITLE HERE</title>
   <meta name="description" content="Chapter 2 Data sources | YOUR TITLE HERE" />
-  <meta name="generator" content="bookdown 0.20 and GitBook 2.6.7" />
+  <meta name="generator" content="bookdown 0.26 and GitBook 2.6.7" />
 
   <meta property="og:title" content="Chapter 2 Data sources | YOUR TITLE HERE" />
   <meta property="og:type" content="book" />
-  
   
   
   
@@ -24,7 +23,7 @@
 <meta name="author" content="YOUR NAMES HERE" />
 
 
-<meta name="date" content="2020-11-09" />
+<meta name="date" content="2022-05-06" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -33,8 +32,8 @@
   
 <link rel="prev" href="index.html"/>
 <link rel="next" href="data-transformation.html"/>
-<script src="libs/header-attrs-2.3/header-attrs.js"></script>
-<script src="libs/jquery-2.2.3/jquery.min.js"></script>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
 <link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
 <link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
@@ -50,8 +49,10 @@
 
 
 
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
 
-<script src="libs/accessible-code-block-0.0.1/empty-anchor.js"></script>
 
 
 
@@ -75,7 +76,16 @@
 <li class="chapter" data-level="2" data-path="data-sources.html"><a href="data-sources.html"><i class="fa fa-check"></i><b>2</b> Data sources</a></li>
 <li class="chapter" data-level="3" data-path="data-transformation.html"><a href="data-transformation.html"><i class="fa fa-check"></i><b>3</b> Data transformation</a></li>
 <li class="chapter" data-level="4" data-path="missing-values.html"><a href="missing-values.html"><i class="fa fa-check"></i><b>4</b> Missing values</a></li>
-<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a></li>
+<li class="chapter" data-level="5" data-path="results.html"><a href="results.html"><i class="fa fa-check"></i><b>5</b> Results</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#overall-trend"><i class="fa fa-check"></i><b>5.1</b> Overall Trend</a></li>
+<li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#genre-exploration"><i class="fa fa-check"></i><b>5.2</b> Genre Exploration</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#popular-genre-year-analysis"><i class="fa fa-check"></i><b>5.3</b> Popular Genre Year Analysis</a></li>
+<li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#overlap-for-popular-genres"><i class="fa fa-check"></i><b>5.4</b> Overlap for popular genres</a></li>
+<li class="chapter" data-level="5.5" data-path="results.html"><a href="results.html#popular-movie-in-most-popular-genres"><i class="fa fa-check"></i><b>5.5</b> Popular Movie in Most popular genres</a></li>
+<li class="chapter" data-level="5.6" data-path="results.html"><a href="results.html#trend-of-the-most-popular-movie"><i class="fa fa-check"></i><b>5.6</b> Trend of The most popular Movie</a></li>
+<li class="chapter" data-level="5.7" data-path="results.html"><a href="results.html#aluvial-for-famous-movies"><i class="fa fa-check"></i><b>5.7</b> Aluvial for famous movies</a></li>
+</ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
 <li class="chapter" data-level="7" data-path="conclusion.html"><a href="conclusion.html"><i class="fa fa-check"></i><b>7</b> Conclusion</a></li>
 <li class="divider"></li>
@@ -97,8 +107,12 @@
           <div class="page-inner">
 
             <section class="normal" id="section-">
-<div id="data-sources" class="section level1" number="2">
-<h1><span class="header-section-number">Chapter 2</span> Data sources</h1>
+<div id="data-sources" class="section level1 hasAnchor" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Data sources<a href="data-sources.html#data-sources" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>We used data sets provided by grouplens websites. The data are fetched from MovieLens website, which is a movie recommendation service.The data sets contains 25 million ratings and one million tag applications across 62423 movies between January 09, 1995 and November 21, 2019. The information of MovieLens’ users is not important in our project. The data sets provide a lot of information about movies, including but not limited to movie tags, ratings(0.5 stars - 5.0 stars), users id, etc. The tag genome data are fetched by Vig, Sen and Riedl(2012). As for how we use the data sets, we download different csv files from the website. For the sake of reproducible workflow, if the datasets will update in the future, we can redownload it and present same Rcode to reproduce the project.
+Reference
+Data Source: <a href="https://grouplens.org/datasets/movielens/" class="uri">https://grouplens.org/datasets/movielens/</a>
+Jesse Vig, Shilad Sen, and John Riedl. 2012. The Tag Genome: Encoding Community Knowledge to Support Novel Interaction. ACM Trans. Interact. Intell. Syst. 2, 3: 13:1–13:44. <a href="https://doi.org/10.1145/2362394" class="uri">https://doi.org/10.1145/2362394</a>. 2362395</p>
 
 </div>
             </section>
@@ -111,7 +125,6 @@
     </div>
   </div>
 <script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/lunr.js"></script>
 <script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
 <script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
@@ -130,6 +143,7 @@ gitbook.start({
 "weibo": false,
 "instapaper": false,
 "vk": false,
+"whatsapp": false,
 "all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
 },
 "fontsettings": {
@@ -150,6 +164,10 @@ gitbook.start({
 "text": null
 },
 "download": null,
+"search": {
+"engine": "fuse",
+"options": null
+},
 "toc": {
 "collapse": "subsection"
 }

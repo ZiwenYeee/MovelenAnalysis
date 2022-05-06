@@ -1,1 +1,12 @@
 # Data transformation
+
+We download the code from https://grouplens.org/datasets/movielens/. It has filtered for extracting user with multiple ratings[>=20].
+
+The following Code can be used for download data.
+
+Note: 
+[Recommended RAM >= 24G]
+
+system("wget https://files.grouplens.org/datasets/movielens/ml-25m.zip")
+
+system("unzip https://files.grouplens.org/datasets/movielens/ml-25m.zip")
