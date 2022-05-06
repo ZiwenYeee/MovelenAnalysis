@@ -1,6 +1,10 @@
 # Data sources
 
-We used data sets provided by grouplens websites. The data are fetched from MovieLens website, which is a movie recommendation service.The data sets contains 25 million ratings and one million tag applications across 62423 movies between January 09, 1995 and November 21, 2019. The information of MovieLens’ users is not important in our project. The data sets provide a lot of information about movies, including but not limited to movie tags, ratings(0.5 stars - 5.0 stars), users id, etc. The tag genome data are fetched by Vig, Sen and Riedl(2012). As for how we use the data sets, we download different csv files from the website. For the sake of reproducible workflow, if the datasets will update in the future, we can redownload it and present same Rcode to reproduce the project.
+We used data sets provided by grouplens websites. The data are fetched from MovieLens website, which is a movie recommendation service.The data sets contains 25 million ratings and one million tag applications across 62423 movies between January 09, 1995 and November 21, 2019. The information of MovieLens' users is not important in our project. The data sets provide a lot of information about movies, including but not limited to movie tags, ratings(0.5 stars - 5.0 stars), users id, etc. The tag genome data are fetched by Vig, Sen and Riedl(2012). 
+As for how we use the data sets, we download different csv files from the website. For the sake of reproducible workflow, if the datasets will update in the future, we can redownload it and present same Rcode to reproduce the project. 
+
 Reference
+
 Data Source: https://grouplens.org/datasets/movielens/
-Jesse Vig, Shilad Sen, and John Riedl. 2012. The Tag Genome: Encoding Community Knowledge to Support Novel Interaction. ACM Trans. Interact. Intell. Syst. 2, 3: 13:1–13:44. https://doi.org/10.1145/2362394. 2362395
+
+Jesse Vig, Shilad Sen, and John Riedl. 2012. The Tag Genome: Encoding Community Knowledge to Support Novel Interaction. ACM Trans. Interact. Intell. Syst. 2, 3: 13:1–13:44. https://doi.org/10.1145/2362394.2362395

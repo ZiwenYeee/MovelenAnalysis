@@ -1,2 +1,10 @@
 # Conclusion
 
+## Exploration:
+Firstly, we found that  “Mean Reversion” may exist in movie rating according to the overall trends of movie ratings. Secondly, we found that Drama, Comedy, Action, Thriller are the most popular genres in the past 20 years. Then we found that about 75% of the movies contains at least one of the following genres, which indicates their popularity. Furthermore, we pay attention to the Drama genre and found out that “Shawshank Redemption”, “Forrest Pump” got more ratings which is not a surprise result. Also, we noticed the ratings of these movies have up and downs. 
+
+## Limitations: 
+The limitations of our project is that the dataset we used is just a sample from the MovieLens website data; and thus the result may be biased. 
+
+## Future directions: 
+In the future, we can do multiple things to improve our project. Firstly, we can use the total dataset (fetch more data from the website) for researching. Maybe we can sample the dataset by ourselves for multiple times. Secondly, we can collect more data related to specific movies such as users' text reviews to analyze why the ratings are fluctuated over time. 

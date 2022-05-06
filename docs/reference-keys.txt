@@ -16,3 +16,6 @@ trend-of-the-most-popular-movie
 aluvial-for-famous-movies
 yearly-rating-for-the-most-popular-movie
 popular-genre-trend-analysis
+exploration
+limitations
+future-directions

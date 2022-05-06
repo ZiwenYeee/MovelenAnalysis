@@ -1,3 +1,142 @@
 # Interactive component
 
 
+
+```{r , echo=FALSE,fig.width=8, fig.height=6}
+
+library(data.table)
+library(dplyr)
+library(lubridate)
+library(ggplot2)
+library(tidyr)
+library(reshape2)
+
+rate = fread("../ml-25m/ratings.csv")
+movie = fread("../ml-25m/movies.csv")
+
+
+rate = merge(rate, movie, by = c("movieId"), all.x = TRUE)
+
+
+rate$date = as.POSIXct(rate$timestamp, origin="1970-01-01", tz="GMT")
+rate$date = as.Date(rate$date, "GMT")
+
+rate$year = format(rate$date, format = "%Y")
+rate = rate %>% filter(year > 1995)
+
+genres = c("Drama","Comedy","Action","Thriller", "Adventure")
+
+
+get_data <- function(rate, name){
+  genres = rate %>% select(c("genres", "year", "rating", "title")) %>% 
+   mutate(genres =  strsplit(genres,split='|', fixed=TRUE)) %>%
+   unnest(c(genres))
+  genres = genres[genres$genres == name,]
+  ds_title = genres %>% group_by(title) %>% 
+  summarise(count = n(), mean_score = mean(rating)) %>%
+  arrange(-count)
+  title_used = ds_title$title[1:5]
+  
+  movie_trend = genres %>% filter(title %in% c(title_used))
+
+
+  movie_year = movie_trend %>% group_by(year, title) %>% summarise(count = n(), mean_score = mean(rating))
+
+  movie_year = movie_year[order(movie_year$title, movie_year$year),]
+
+  return(movie_year)
+}
+  
+drama_data = get_data(rate, "Drama")
+comedy_data = get_data(rate, "Comedy")
+
+
+g = ggplot(drama_data,) +
+    geom_line( aes(year, mean_score, color = title, group = title)) + 
+  theme_grey(10) +
+  theme(legend.title = element_blank()) +
+  scale_x_discrete(breaks = seq(1995, 2020, by = 3)) + 
+  ylab("Average Rating[Out of 5]")
+
+ggplotly(g)
+
+
+
+
+```
+
+
+```{r}
+library(plotly)
+library(quantmod)
+
+d <- quantmod::getSymbols("AAPL")
+
+df <- data.frame(Date=index(AAPL),coredata(AAPL))
+
+high_annotations <- list(
+  x=df$Date[df$AAPL.High == max(df$AAPL.High)], 
+  y=max(df$AAPL.High),
+  xref='x', yref='y',
+  text=paste0('High: $',max(df$AAPL.High)),
+  ax=0, ay=-40
+)
+
+low_annotations <- list(
+  x=df$Date[df$AAPL.Low == min(df$AAPL.Low)], 
+  y=min(df$AAPL.Low),
+  xref='x', yref='y',
+  text=paste0('Low: $',min(df$AAPL.Low)),
+  ax=0, ay=40
+)
+
+# updatemenus component
+updatemenus <- list(
+  list(
+    active = -1,
+    type= 'buttons',
+    buttons = list(
+      list(
+        label = "High",
+        method = "update",
+        args = list(list(visible = c(FALSE, TRUE)),
+                    list(title = "Apple High",
+                         annotations = list(c(), high_annotations)))),
+      list(
+        label = "Low",
+        method = "update",
+        args = list(list(visible = c(TRUE, FALSE)),
+                    list(title = "Apple Low",
+                         annotations = list(low_annotations, c() )))),
+      list(
+        label = "Both",
+        method = "update",
+        args = list(list(visible = c(TRUE, TRUE)),
+                    list(title = "Apple",
+                         annotations = list(low_annotations, high_annotations)))),
+      list(
+        label = "Reset",
+        method = "update",
+        args = list(list(visible = c(TRUE, TRUE)),
+                    list(title = "Apple",
+                         annotations = list(c(), c())))))
+  )
+)
+
+fig <- df %>% plot_ly(type = 'scatter', mode = 'lines') 
+fig <- fig %>% add_lines(x=~Date, y=~AAPL.High, name="High",
+            line=list(color="#33CFA5")) 
+fig <- fig %>% add_lines(x=~Date, y=~AAPL.Low, name="Low",
+            line=list(color="#F06A6A")) 
+fig <- fig %>% layout(title = "Apple", showlegend=FALSE,
+         xaxis=list(title="Date"),
+         yaxis=list(title="Price ($)"),
+         updatemenus=updatemenus)
+
+
+
+fig
+  
+
+
+```

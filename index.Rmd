@@ -6,13 +6,10 @@ site: bookdown::bookdown_site
 ---
 
 # Introduction
-
 Watching movies as a hobby for the sake of entertaining is very popular in today's society. Different people may like various genres of movies. The popular movie genres may change over time. In this project, we hope to find out the change of movie interest in the past 20 years. In other words, we will find the genres of movies that are becoming popular over time. Furthermore, for each genre, we will find the specific popular movie.The research questions we will be answering is that: 
 
-1. What kind of movies and genres are becoming popular with the development of films? Moreover, we know that some movies are rating high in its period. Is it rating higher or lower?
+1. What kind of movies and genres are becoming popular with the development of films? 
 
-2. For different kinds of genre, we are wondering whether the hot topic in each year will help improving movie scores or not. For example, we assume that romantic topic are popular in 2004, Does it affect movie scores in this year? What’s the change in the next few years?
+2. How do the popular genre trends changing from year to year?
 
-3. Which kind of genres usually get lower ratings in general. Will the lower rating genres changing over time?
-
-4. We are wondering the changing habit of different users. For example, people given high score for titantic in the past will turn to what kinds of moives in the future?
+3. We hope to know what are the most popular movies in the famous genre? Also, we would like to find how the ratings for those movies vary over time?

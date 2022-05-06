@@ -152,7 +152,11 @@ ggplot(movie_overlap, aes(x = "", y = perc, fill = cat)) +
   guides(fill = guide_legend(title = "Answer")) +
   scale_fill_viridis_d() +
   coord_polar(theta = "y") + 
-  theme_void()
+  theme_void() +
+  ggtitle("Percentage for overlaping genre",) +
+  theme_grey(12) +
+  theme(legend.title = element_blank(), plot.title=element_text(hjust=0.5))
+
 ```
 
 
@@ -186,9 +190,11 @@ movie_cnt = movie_cnt[1:10, ]
 ggplot(data=movie_cnt, aes(x=count, y=reorder(title, count))) +
     geom_bar(stat="identity") + 
   scale_y_discrete("Movie name", expand=c(0,0)) + 
-  scale_x_continuous("Total Rate Count")
+  scale_x_continuous("Total Rate Count") +
+  ggtitle("Total Rating count for top 10 movies in Drama Genre",) +
+  theme_grey(12) +
+  theme(legend.title = element_blank(), plot.title=element_text(hjust=0.5))
 ```
-
 
 ## Yearly Rating for The most popular Movie 
 
@@ -234,19 +240,6 @@ ggplot(movie_year,) +
   theme_grey(10) +
   theme(legend.title = element_blank()) +
   scale_x_discrete(breaks = seq(1995, 2020, by = 3)) + 
-  ylab("Average Rating[Out of]")
+  ylab("Average Rating[Out of 5]")
 
 ```
-
-## Aluvial for famous movies
-
-
-```{r, echo = FALSE,fig.width=8, fig.height=4}
-
-movie_name = c("Forrest Gump (1994)", "Shawshank Redemption, The (1994)", 
-  "Pulp Fiction (1994)" , "Schindler's List (1993)","Braveheart (1995)")
-
-rate_f = rate %>% filter(title %in% movie_name)
-
-```
-
