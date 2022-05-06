@@ -5,6 +5,7 @@ We begin with an overall analysis and then move to genre analysis. Finally we re
 
 ## Overall Trend
 
+From overall perspective, one thing worth noting is that the movielen dataset isn’t affected by the rapid development of internet. From 1997 to 2019,  approximately 1 million rating as assigned to different movies. Another interesting thing is that, when we calculate rating for each year, it appears to be the same at 3.5 all time! Regarding that we only have 25M data sampling from a large dataset, if it’s not caused by sampling, it exposes a fact that “Mean Reversion” may exist in movie rating! 
 
 ```{r , echo=FALSE,fig.width=8, fig.height=6}
 
@@ -32,22 +33,10 @@ rate_count = rate %>% group_by(year) %>% summarise(count = n(), mean_score = mea
 rate_count$count = rate_count$count/1000000
 rate_cnt_gather = gather(rate_count, key = "name", value = "value", -year)
 
-#scaleFactor <- max(rate_count$count) / max(rate_count$mean_score)
-theme_update(plot.title = element_text(hjust = 0.5))
-g = ggplot(rate_count) +
-  geom_line(aes(x = year, y = count, group = 1)) +
-  ggtitle("Rating Trend & Count Trend",) +
-  labs (x = "Year", y = "Rate Count(1 million)/Per year") +
-  theme_grey(12) +
-  theme(legend.title = element_blank(), plot.title=element_text(hjust=0.5)) +
-  scale_x_discrete(breaks = seq(1995, 2020, by = 2))
-
-
 var_name <- c(
   'count'="Rate Number[M/year]",
   "mean_score"="Average Rating[/5]"
 )
-
 g = ggplot(rate_cnt_gather) +
   geom_line(aes(x = year, y = value, group = 1)) +
   ggtitle("Rating Trend & Count Trend",) +
@@ -62,7 +51,8 @@ g
 
 
 ## Genre Exploration
-//To-do: Modified Label\
+
+Given that we already have a concept for overall data, let's move to the next level. We can divide all the data into different genre and see what kind of genres gets more rating, indicating that more people would like to watch movie under these genres! The figure shown below shows that people love to watch movies related to Drama, Comedy, Action, Thriller and etc...It tells a common sense that most people love to watch something may entertain themselves.
 
 
 ```{r , echo=FALSE, fig.width=8, fig.height=4}
@@ -76,30 +66,21 @@ genres_cnt = genres %>% group_by(genres) %>% summarise(count = n()/1000000, mean
 ggplot(data=genres_cnt, aes(x=count, y=reorder(genres, count))) +
     geom_bar(stat="identity") + 
   scale_y_discrete("Genre name", expand=c(0,0)) + 
-  scale_x_continuous("Total Rate Count[Million]")
+  scale_x_continuous("Total Rating Count[Million]") +
+  ggtitle("Rating Count Per Genre",) +
+  theme_grey(12) +
+  theme(legend.title = element_blank(), plot.title=element_text(hjust=0.5))
 
 rm(genres);invisible(gc())
 
 ```
 
 
-## Popular Genre Year Analysis
+## Popular Genre Trend Analysis
+
+Next, we analysis popular genre trend from year to year, hoping to find some insights from yearly analysis. Interestingly, there's high correlation between these genre. From the figure below, we can find they almost have the same trend over the year!
 
 ```{r, echo = FALSE,fig.width=8, fig.height=4}
-
-
-cross_func <- function(category, c_list){
-  cnt = 0
-  for(c in c_list){
-    if(grepl(category, c)){
-      cnt = cnt + 1
-    }
-  }
-  return(cnt)
-}
-
-
-
 
 genres = rate %>% select(c("genres", "year", "rating")) %>% 
    mutate(genres =  strsplit(genres,split='|', fixed=TRUE)) %>%
@@ -113,7 +94,7 @@ selected_genres = c(top_genres$genres)
 
 genres = genres %>% filter(genres %in% selected_genres)
 
-genres_year = genres %>% group_by(year, genres) %>% summarise(count = n(), mean_score = mean(rating))
+genres_year = genres %>% group_by(year, genres) %>% summarise(count = n()/1000000, mean_score = mean(rating))
 
 genres_year = genres_year[order(genres_year$genres, genres_year$year),]
 
@@ -121,12 +102,20 @@ ggplot(genres_year,) +
     geom_line( aes(year, count, color = genres, group = genres)) + 
   theme_grey(10) +
   theme(legend.title = element_blank()) +
-  scale_x_discrete(breaks = seq(1995, 2020, by = 3))
+  scale_x_discrete(breaks = seq(1995, 2020, by = 3)) + 
+  ylab("Rating count[Millions]") +
+  ggtitle("Rating Count Yearly for Popular Genre",) +
+  theme_grey(12) +
+  theme(legend.title = element_blank(), plot.title=element_text(hjust=0.5))
+
+  # scale_y_continuous(labels = "Rating count[Millions]")
 
 
 ```
 
 ## Overlap for popular genres
+
+The figure above triggers us to think about a question. Since the trend with those genres is so similar, is that some movies contains at least two of them and people love to watch those movies? We categorize movies according to their genre and calculate percentage of each level. We find that 74.8% movies contains at least one of the genre. It tells us that most of films fall into these genres, meaning that people are likely to watch these genres movies. However, it also raises doubt that, is that people love to watch movies from genre, or some movies from these genre attract people to watch and consequently these genres become one of the most popular genre among all the genre?
 
 ```{r, echo = FALSE}
 
@@ -198,7 +187,7 @@ ggplot(data=movie_cnt, aes(x=count, y=reorder(title, count))) +
 ```
 
 
-## Trend of The most popular Movie 
+## Yearly Rating for The most popular Movie 
 
 ```{r, echo = FALSE,fig.width=8, fig.height=4}
 
@@ -233,7 +222,8 @@ ggplot(movie_year,) +
     geom_line( aes(year, mean_score, color = title, group = title)) + 
   theme_grey(10) +
   theme(legend.title = element_blank()) +
-  scale_x_discrete(breaks = seq(1995, 2020, by = 3))
+  scale_x_discrete(breaks = seq(1995, 2020, by = 3)) + 
+  ylab("Average Rating[Out of]")
 
 ```
 

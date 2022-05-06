@@ -14,3 +14,5 @@ overlap-for-popular-genres
 popular-movies
 trend-of-the-most-popular-movie
 aluvial-for-famous-movies
+yearly-rating-for-the-most-popular-movie
+popular-genre-trend-analysis

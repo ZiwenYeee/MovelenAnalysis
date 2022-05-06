@@ -80,10 +80,10 @@
 <ul>
 <li class="chapter" data-level="5.1" data-path="results.html"><a href="results.html#overall-trend"><i class="fa fa-check"></i><b>5.1</b> Overall Trend</a></li>
 <li class="chapter" data-level="5.2" data-path="results.html"><a href="results.html#genre-exploration"><i class="fa fa-check"></i><b>5.2</b> Genre Exploration</a></li>
-<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#popular-genre-year-analysis"><i class="fa fa-check"></i><b>5.3</b> Popular Genre Year Analysis</a></li>
+<li class="chapter" data-level="5.3" data-path="results.html"><a href="results.html#popular-genre-trend-analysis"><i class="fa fa-check"></i><b>5.3</b> Popular Genre Trend Analysis</a></li>
 <li class="chapter" data-level="5.4" data-path="results.html"><a href="results.html#overlap-for-popular-genres"><i class="fa fa-check"></i><b>5.4</b> Overlap for popular genres</a></li>
 <li class="chapter" data-level="5.5" data-path="results.html"><a href="results.html#popular-movie-in-most-popular-genres"><i class="fa fa-check"></i><b>5.5</b> Popular Movie in Most popular genres</a></li>
-<li class="chapter" data-level="5.6" data-path="results.html"><a href="results.html#trend-of-the-most-popular-movie"><i class="fa fa-check"></i><b>5.6</b> Trend of The most popular Movie</a></li>
+<li class="chapter" data-level="5.6" data-path="results.html"><a href="results.html#yearly-rating-for-the-most-popular-movie"><i class="fa fa-check"></i><b>5.6</b> Yearly Rating for The most popular Movie</a></li>
 <li class="chapter" data-level="5.7" data-path="results.html"><a href="results.html#aluvial-for-famous-movies"><i class="fa fa-check"></i><b>5.7</b> Aluvial for famous movies</a></li>
 </ul></li>
 <li class="chapter" data-level="6" data-path="interactive-component.html"><a href="interactive-component.html"><i class="fa fa-check"></i><b>6</b> Interactive component</a></li>
@@ -112,28 +112,30 @@
 <p>We begin with an overall analysis and then move to genre analysis. Finally we reach to analysing popular movie in the most popular genre and to see its connection with other movies.</p>
 <div id="overall-trend" class="section level2 hasAnchor" number="5.1">
 <h2><span class="header-section-number">5.1</span> Overall Trend<a href="results.html#overall-trend" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>From overall perspective, one thing worth noting is that the movielen dataset isn’t affected by the rapid development of internet. From 1997 to 2019, approximately 1 million rating as assigned to different movies. Another interesting thing is that, when we calculate rating for each year, it appears to be the same at 3.5 all time! Regarding that we only have 25M data sampling from a large dataset, if it’s not caused by sampling, it exposes a fact that “Mean Reversion” may exist in movie rating!</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-6-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="genre-exploration" class="section level2 hasAnchor" number="5.2">
 <h2><span class="header-section-number">5.2</span> Genre Exploration<a href="results.html#genre-exploration" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p>//To-do: Modified Label<br />
-</p>
+<p>Given that we already have a concept for overall data, let’s move to the next level. We can divide all the data into different genre and see what kind of genres gets more rating, indicating that more people would like to watch movie under these genres! The figure shown below shows that people love to watch movies related to Drama, Comedy, Action, Thriller and etc…It tells a common sense that most people love to watch something may entertain themselves.</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-7-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
-<div id="popular-genre-year-analysis" class="section level2 hasAnchor" number="5.3">
-<h2><span class="header-section-number">5.3</span> Popular Genre Year Analysis<a href="results.html#popular-genre-year-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="popular-genre-trend-analysis" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Popular Genre Trend Analysis<a href="results.html#popular-genre-trend-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Next, we analysis popular genre trend from year to year, hoping to find some insights from yearly analysis. Interestingly, there’s high correlation between these genre. From the figure below, we can find they almost have the same trend over the year!</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-8-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="overlap-for-popular-genres" class="section level2 hasAnchor" number="5.4">
 <h2><span class="header-section-number">5.4</span> Overlap for popular genres<a href="results.html#overlap-for-popular-genres" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The figure above triggers us to think about a question. Since the trend with those genres is so similar, is that some movies contains at least two of them and people love to watch those movies? We categorize movies according to their genre and calculate percentage of each level. We find that 74.8% movies contains at least one of the genre. It tells us that most of films fall into these genres, meaning that people are likely to watch these genres movies. However, it also raises doubt that, is that people love to watch movies from genre, or some movies from these genre attract people to watch and consequently these genres become one of the most popular genre among all the genre?</p>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
 <div id="popular-movie-in-most-popular-genres" class="section level2 hasAnchor" number="5.5">
 <h2><span class="header-section-number">5.5</span> Popular Movie in Most popular genres<a href="results.html#popular-movie-in-most-popular-genres" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 </div>
-<div id="trend-of-the-most-popular-movie" class="section level2 hasAnchor" number="5.6">
-<h2><span class="header-section-number">5.6</span> Trend of The most popular Movie<a href="results.html#trend-of-the-most-popular-movie" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="yearly-rating-for-the-most-popular-movie" class="section level2 hasAnchor" number="5.6">
+<h2><span class="header-section-number">5.6</span> Yearly Rating for The most popular Movie<a href="results.html#yearly-rating-for-the-most-popular-movie" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><img src="finalproj_files/figure-html/unnamed-chunk-11-1.png" width="768" style="display: block; margin: auto;" /></p>
 </div>
 <div id="aluvial-for-famous-movies" class="section level2 hasAnchor" number="5.7">
